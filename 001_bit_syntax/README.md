@@ -1,20 +1,20 @@
-# Utf8Validator
+## Utf8 직접 구현하고 bit syntax 를 제대로 익혀봅시다.
 
-**TODO: Add description**
+Reference: 
+1. Wiki : https://en.wikipedia.org/wiki/UTF-8
+2. Erlang : http://erlang.org/doc/programming_examples/bit_syntax.html
+3. Elixir : https://elixir-lang.org/getting-started/binaries-strings-and-char-lists.html
 
-## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `utf8` to your list of dependencies in `mix.exs`:
+## 1. Unicode integer <-> Utf8 binary
 
-```elixir
-def deps do
-  [
-    {:utf8, "~> 0.1.0"}
-  ]
-end
-```
+lib/utf8.ex 내용을 채워봅시다.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/utf8](https://hexdocs.pm/utf8).
+## 2. Uncode charlist <-> Utf8 binary
+
+1에서 만든 함수를 사용하여 
+
+1. Kernel.to_charlist/1
+2. Kernel.to_string/1
+
+lib/charlist.ex 에 구현합시다.
