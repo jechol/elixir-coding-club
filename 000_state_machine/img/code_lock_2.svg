@@ -68,7 +68,7 @@
       style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="380"
       y="184.75">
       <tspan x="380" y="184.75">do_lock()</tspan>
-      <tspan x="380" y="210.15">Clear Buttons</tspan>
+      <tspan x="380" y="210.15">Clear input</tspan>
     </text>
   </g>
   <g>
@@ -145,7 +145,7 @@
     <text font-size="20.32"
       style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="640.719"
       y="466.35">
-      <tspan x="640.719" y="466.35">Collect Buttons</tspan>
+      <tspan x="640.719" y="466.35">Append to input</tspan>
     </text>
   </g>
   <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="640" y1="400" x2="640.719" y2="440" />
@@ -163,7 +163,7 @@
     <text font-size="20.32"
       style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="140"
       y="466.35">
-      <tspan x="140" y="466.35">Clear Buttons</tspan>
+      <tspan x="140" y="466.35">Clear input</tspan>
     </text>
   </g>
   <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="480,640 380,640 380,600 " />
