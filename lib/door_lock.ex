@@ -11,7 +11,7 @@ defmodule DoorLock do
   end
 
   def init(code) do
-    {:ok, :locked, %Data{code: code, length: length(code)}}
+    {:ok, :locked, %Data{code: code}}
   end
 
   def button(pid, button) do
@@ -24,17 +24,21 @@ defmodule DoorLock do
     {:keep_state, %Data{data | buttons: []}}
   end
 
-  def locked(:cast, {:button, button}, %Data{code: code, length: length, buttons: buttons} = data) do
+  def locked(:timeout, _, %Data{} = data) do
+    {:keep_state, %Data{data | buttons: []}}
+  end
+
+  def locked(:cast, {:button, button}, %Data{code: code, buttons: buttons} = data) do
     (buttons ++ [button])
     |> Enum.reverse()
-    |> Enum.take(length)
+    |> Enum.take(code |> length())
     |> Enum.reverse()
     |> case do
       ^code ->
         {:next_state, :open, %Data{data | buttons: []}, [{:state_timeout, 5000, :lock}]}
 
       new_buttons ->
-        {:keep_state, %Data{buttons: new_buttons}}
+        {:keep_state, %Data{data | buttons: new_buttons}, 5000}
     end
   end
 
