@@ -1,3 +1,5 @@
+Reference : https://erlang.org/doc/design_principles/statem.html
+
 # Goal 1 : State transition
 ![](img/code_lock.svg)
 
