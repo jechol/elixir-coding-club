@@ -45,7 +45,7 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 3: Event timeout" do
-    # @describetag :pending
+    @describetag :pending
 
     test "locked" do
       assert DoorLock.locked(:cast, {:button, 1}, %Data{code: @code, input: []}) ==
@@ -57,26 +57,18 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 4: Convert to Moore machine from Mealy machine" do
-    @describetag :pending
+    # @describetag :pending
 
     test "init" do
       assert DoorLock.init(@code) == {:ok, :locked, %Data{code: @code, input: []}}
     end
 
     test "locked" do
-      assert DoorLock.locked(:enter, :open, %Data{code: @code, input: []}, %{
-               &DoorLock.do_lock/0 => fn -> send(self(), :do_lock) end
-             }) == :keep_state_and_data
-
-      assert_receive :do_lock
+      assert DoorLock.locked(:enter, :open, %Data{code: @code, input: []}) == :keep_state_and_data
     end
 
     test "open" do
-      assert DoorLock.open(:enter, :locked, %Data{code: @code, input: []}, %{
-               &DoorLock.do_unlock/0 => fn -> send(self(), :do_unlock) end
-             }) == :keep_state_and_data
-
-      assert_receive :do_unlock
+      assert DoorLock.open(:enter, :locked, %Data{code: @code, input: []}) == :keep_state_and_data
     end
   end
 end

@@ -1,5 +1,5 @@
 defmodule DoorLock do
-  use GenStateMachine, callback_mode: :state_functions
+  use GenStateMachine, callback_mode: [:state_functions, :state_enter]
 
   defmodule Data do
     defstruct code: [], input: []
@@ -19,6 +19,11 @@ defmodule DoorLock do
   end
 
   ## state callback
+  def locked(:enter, _old_state, _data) do
+    do_lock()
+    :keep_state_and_data
+  end
+
   def locked(:timeout, _, data) do
     do_lock()
     {:keep_state, %Data{data | input: []}}
@@ -31,12 +36,16 @@ defmodule DoorLock do
     |> Enum.reverse()
     |> case do
       ^code ->
-        do_unlock()
         {:next_state, :open, %Data{data | input: []}, [{:state_timeout, 5000, :lock}]}
 
       new_input ->
         {:keep_state, %Data{data | input: new_input}, 5000}
     end
+  end
+
+  def open(:enter, _old_state, _data) do
+    do_unlock()
+    :keep_state_and_data
   end
 
   def open(:state_timeout, :lock, data) do
