@@ -3,7 +3,7 @@ defmodule Utf8Validator.MixProject do
 
   def project do
     [
-      app: :utf8_validator,
+      app: :utf8,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
