@@ -19,6 +19,11 @@ defmodule DoorLock do
   end
 
   ## state callback
+  def locked(:timeout, _, data) do
+    do_lock()
+    {:keep_state, %Data{data | input: []}}
+  end
+
   def locked(:cast, {:button, button}, %Data{code: code, input: input} = data) do
     (input ++ [button])
     |> Enum.reverse()
@@ -30,7 +35,7 @@ defmodule DoorLock do
         {:next_state, :open, %Data{data | input: []}, [{:state_timeout, 5000, :lock}]}
 
       new_input ->
-        {:keep_state, %Data{data | input: new_input}}
+        {:keep_state, %Data{data | input: new_input}, 5000}
     end
   end
 

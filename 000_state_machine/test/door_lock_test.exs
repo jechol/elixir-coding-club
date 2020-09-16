@@ -30,7 +30,7 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 2: State timeout" do
-    # @describetag :pending
+    @describetag :pending
 
     test "locked" do
       assert DoorLock.locked(:cast, {:button, 2}, %Data{code: @code, input: [2, 1]}) ==
@@ -45,7 +45,7 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 3: Event timeout" do
-    @describetag :pending
+    # @describetag :pending
 
     test "locked" do
       assert DoorLock.locked(:cast, {:button, 1}, %Data{code: @code, input: []}) ==
