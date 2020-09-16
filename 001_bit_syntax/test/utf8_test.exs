@@ -13,17 +13,17 @@ defmodule Utf8Test do
   ]
 
   describe "Utf8" do
-    @describetag :pending
+    # @describetag :pending
 
     test "encode" do
       for {unicode, utf8} <- @unicode_to_utf8 do
-        assert Utf8.encode(unicode) == {:ok, utf8}
+        assert Utf8.encode(unicode) == utf8
       end
     end
 
     test "decode" do
       for {unicode, utf8} <- @unicode_to_utf8 do
-        assert Utf8.decode(utf8) == {:ok, unicode}
+        assert Utf8.decode(utf8) == unicode
       end
     end
   end
