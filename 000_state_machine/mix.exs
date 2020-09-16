@@ -1,9 +1,9 @@
-defmodule Utf8Validator.MixProject do
+defmodule DoorLock.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :utf8_validator,
+      app: :door_lock,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
@@ -14,8 +14,7 @@ defmodule Utf8Validator.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-      mod: {Utf8Validator.Application, []}
+      extra_applications: [:logger]
     ]
   end
 
