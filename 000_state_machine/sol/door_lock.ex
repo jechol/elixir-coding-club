@@ -11,7 +11,7 @@ defmodule DoorLock do
     GenStateMachine.start_link(__MODULE__, code, [])
   end
 
-  def init(code) do
+  definject init(code) do
     {:ok, :locked, %Data{code: code}}
   end
 

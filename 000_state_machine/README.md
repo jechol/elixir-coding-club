@@ -21,3 +21,8 @@
 
 1. 현재 구현은 event handler 에서 side effect(=do_unlock)가 발생하는 Mealy machine임.
 2. callback_mode 를 [:state_functions, :state_enter] 로 변경하고, state진입시 발생하는 enter event에서 side effect를 발생하도록 변경.
+
+# Goal 5 : Test w/o side effect
+
+1. 문제점 : mix test 시마다 do_lock, do_unlock이 실행되어 Locked, Unlocked 메시지가 출력된다.
+2. 해결법 : definject 라이브러리를 사용.

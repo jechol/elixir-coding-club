@@ -73,7 +73,7 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 5: Replace side effect on test with definject" do
-    # @describetag :pending
+    @describetag :pending
 
     test "init" do
       assert DoorLock.init(@code, %{
