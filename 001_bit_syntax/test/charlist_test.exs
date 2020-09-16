@@ -1,7 +1,7 @@
 defmodule CharlistTest do
   use ExUnit.Case
 
-  # @moduletag :pending
+  @moduletag :pending
 
   test "charlist_to_binary" do
     assert Charlist.charlist_to_binary('엘릭서') == "엘릭서"
