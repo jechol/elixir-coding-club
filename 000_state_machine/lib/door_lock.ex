@@ -27,11 +27,15 @@ defmodule DoorLock do
     |> case do
       ^code ->
         do_unlock()
-        {:next_state, :open, %Data{data | input: []}}
+        {:next_state, :open, %Data{data | input: []}, [{:state_timeout, 5000, :lock}]}
 
       new_input ->
         {:keep_state, %Data{data | input: new_input}}
     end
+  end
+
+  def open(:state_timeout, :lock, data) do
+    {:next_state, :locked, data}
   end
 
   def open(:cast, {:button, _}, _) do

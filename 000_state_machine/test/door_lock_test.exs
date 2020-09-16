@@ -6,7 +6,7 @@ defmodule DoorLockTest do
   @code [1, 2]
 
   describe "Goal 1: State transition" do
-    # @describetag :pending
+    @describetag :pending
 
     test "init" do
       assert DoorLock.init(@code) == {:ok, :locked, %Data{code: @code, input: []}}
@@ -30,11 +30,11 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 2: State timeout" do
-    @describetag :pending
+    # @describetag :pending
 
     test "locked" do
       assert DoorLock.locked(:cast, {:button, 2}, %Data{code: @code, input: [2, 1]}) ==
-               {:next_state, :open, %Data{code: @code, input: [1, 2]},
+               {:next_state, :open, %Data{code: @code, input: []},
                 [{:state_timeout, 5000, :lock}]}
     end
 
