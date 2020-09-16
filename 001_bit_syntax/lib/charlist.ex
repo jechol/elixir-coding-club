@@ -1,9 +1,9 @@
 defmodule Charlist do
-  def charlist_to_binary(list) when is_list(list) do
+  def charlist_to_string(list) when is_list(list) do
     ""
   end
 
-  def binary_to_charlist(<<bin::binary>>) do
+  def string_to_charlist(<<bin::binary>>) do
     ''
   end
 end

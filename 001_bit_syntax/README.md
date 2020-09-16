@@ -14,7 +14,7 @@ lib/utf8.ex 내용을 채워봅시다.
 
 1에서 만든 함수를 사용하여
 
-1. Kernel.to_charlist/1
-2. Kernel.to_string/1
+1. Kernel.to_charlist/1 와 동일한 기능을 하는 Charlist.string_to_charlist
+2. Kernel.to_string/1 와 동일한 기능을 하는 Charlist.charlist_to_string
 
-lib/charlist.ex 에 구현합시다.
+을 lib/charlist.ex 에 구현합시다.
