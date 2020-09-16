@@ -6,7 +6,7 @@ defmodule DoorLockTest do
   @code [1, 2]
 
   describe "Goal 1: State transition" do
-    @describetag :pending
+    # @describetag :pending
 
     test "init" do
       assert DoorLock.init(@code) == {:ok, :locked, %Data{code: @code, input: []}}
