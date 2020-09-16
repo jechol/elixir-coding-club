@@ -1,5 +1,6 @@
 defmodule DoorLock do
   use GenStateMachine, callback_mode: [:state_functions, :state_enter]
+  import Definject
 
   defmodule Data do
     defstruct code: [], input: []
@@ -10,7 +11,7 @@ defmodule DoorLock do
     GenStateMachine.start_link(__MODULE__, code, [])
   end
 
-  def init(code) do
+  definject init(code) do
     {:ok, :locked, %Data{code: code}}
   end
 
@@ -19,17 +20,17 @@ defmodule DoorLock do
   end
 
   ## state callback
-  def locked(:enter, _old_state, _data) do
-    do_lock()
+  definject locked(:enter, _old_state, _data) do
+    __MODULE__.do_lock()
     :keep_state_and_data
   end
 
-  def locked(:timeout, _, data) do
+  definject locked(:timeout, _, data) do
     do_lock()
     {:keep_state, %Data{data | input: []}}
   end
 
-  def locked(:cast, {:button, button}, %Data{code: code, input: input} = data) do
+  definject locked(:cast, {:button, button}, %Data{code: code, input: input} = data) do
     (input ++ [button])
     |> Enum.reverse()
     |> Enum.take(code |> length())
@@ -43,16 +44,16 @@ defmodule DoorLock do
     end
   end
 
-  def open(:enter, _old_state, _data) do
-    do_unlock()
+  definject open(:enter, _old_state, _data) do
+    __MODULE__.do_unlock()
     :keep_state_and_data
   end
 
-  def open(:state_timeout, :lock, data) do
+  definject open(:state_timeout, :lock, data) do
     {:next_state, :locked, data}
   end
 
-  def open(:cast, {:button, _}, _) do
+  definject open(:cast, {:button, _}, _) do
     :keep_state_and_data
   end
 

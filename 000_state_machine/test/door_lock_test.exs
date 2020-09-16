@@ -57,7 +57,7 @@ defmodule DoorLockTest do
   end
 
   describe "Goal 4: Convert to Moore machine from Mealy machine" do
-    # @describetag :pending
+    @describetag :pending
 
     test "init" do
       assert DoorLock.init(@code) == {:ok, :locked, %Data{code: @code, input: []}}
@@ -69,6 +69,35 @@ defmodule DoorLockTest do
 
     test "open" do
       assert DoorLock.open(:enter, :locked, %Data{code: @code, input: []}) == :keep_state_and_data
+    end
+  end
+
+  describe "Goal 5: Replace side effect on test with definject" do
+    # @describetag :pending
+
+    test "init" do
+      assert DoorLock.init(@code, %{
+               &DoorLock.do_lock/0 => fn -> send(self(), :do_lock) end,
+               strict: false
+             }) == {:ok, :locked, %Data{code: @code, input: []}}
+
+      refute_receive :do_lock
+    end
+
+    test "locked" do
+      assert DoorLock.locked(:enter, :open, %Data{code: @code, input: []}, %{
+               &DoorLock.do_lock/0 => fn -> send(self(), :do_lock) end
+             }) == :keep_state_and_data
+
+      assert_receive :do_lock
+    end
+
+    test "open" do
+      assert DoorLock.open(:enter, :locked, %Data{code: @code, input: []}, %{
+               &DoorLock.do_unlock/0 => fn -> send(self(), :do_unlock) end
+             }) == :keep_state_and_data
+
+      assert_receive :do_unlock
     end
   end
 end
