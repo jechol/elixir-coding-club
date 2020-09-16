@@ -20,9 +20,9 @@ defmodule DoorLock do
   end
 
   ## state callback
-  definject locked(:enter, _old_state, %Data{} = data) do
+  definject locked(:enter, _old_state, %Data{}) do
     __MODULE__.do_lock()
-    {:keep_state, %Data{data | input: []}}
+    :keep_state_and_data
   end
 
   definject locked(:timeout, _, %Data{} = data) do
@@ -44,12 +44,11 @@ defmodule DoorLock do
   end
 
   definject open(:enter, _old_state, %Data{}) do
-    do_unlock()
+    __MODULE__.do_unlock()
     :keep_state_and_data
   end
 
   definject open(:state_timeout, :lock, data) do
-    __MODULE__.do_lock()
     {:next_state, :locked, data}
   end
 

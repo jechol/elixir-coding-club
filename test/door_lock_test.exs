@@ -1,12 +1,11 @@
 defmodule DoorLockTest do
   use ExUnit.Case
-  import ExUnit.CaptureIO
 
   alias DoorLock.Data
 
   @code [1, 2]
 
-  describe "Goal 1: Add state [:open, :locked]" do
+  describe "Goal 1: State transition" do
     @describetag :pending
 
     test "init" do
@@ -30,7 +29,7 @@ defmodule DoorLockTest do
     end
   end
 
-  describe "Goal 2: State timeout for open" do
+  describe "Goal 2: State timeout" do
     @describetag :pending
 
     test "locked" do
@@ -45,7 +44,7 @@ defmodule DoorLockTest do
     end
   end
 
-  describe "Goal 3: Event timeout for locked" do
+  describe "Goal 3: Event timeout" do
     @describetag :pending
 
     test "locked" do
@@ -67,7 +66,7 @@ defmodule DoorLockTest do
     test "locked" do
       assert DoorLock.locked(:enter, :open, %Data{code: @code, input: []}, %{
                &DoorLock.do_lock/0 => fn -> send(self(), :do_lock) end
-             }) == {:keep_state, %Data{code: @code, input: []}}
+             }) == :keep_state_and_data
 
       assert_receive :do_lock
     end
@@ -75,7 +74,7 @@ defmodule DoorLockTest do
     test "open" do
       assert DoorLock.open(:enter, :locked, %Data{code: @code, input: []}, %{
                &DoorLock.do_unlock/0 => fn -> send(self(), :do_unlock) end
-             }) == {:keep_state, %Data{code: @code, input: []}}
+             }) == :keep_state_and_data
 
       assert_receive :do_unlock
     end
