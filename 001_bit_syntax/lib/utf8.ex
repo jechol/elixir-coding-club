@@ -10,6 +10,9 @@ defmodule Utf8 do
   # +-------+---------+----------+----------+----------+----------+----------+
   # | 4     | U+10000 | U+10FFFF | 11110xxx | 10xxxxxx | 10xxxxxx | 10xxxxxx |
   # +-------+---------+----------+----------+----------+----------+----------+
+
+  # Encode
+
   def encode(n) when is_integer(n) and n >= 0x0000 and n <= 0x007F do
     <<0::1, n::7>>
   end
@@ -28,6 +31,8 @@ defmodule Utf8 do
     <<first::3, second::6, third::6, fourth::6>> = <<n::21>>
     <<0b11110::5, first::3, 0b10::2, second::6, 0b10::2, third::6, 0b10::2, fourth::6>>
   end
+
+  # Decode
 
   def decode(<<0::1, n::7>>) do
     n
