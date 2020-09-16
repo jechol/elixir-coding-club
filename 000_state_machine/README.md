@@ -1,6 +1,30 @@
 Reference : https://erlang.org/doc/design_principles/statem.html
 
+# State machine 이란
+
+1. State machine 이란?
+   1. State + Input => (State', Output)
+   2. Erlang process 자체가 state machine임.
+      1. state = process dictionary + recursive call argument
+      2. input = receive
+      3. output = send
+2. 그럼 gen_statem 은 무슨 용도?
+   1. State별로 input handler가 달라질 경우
+   2. State별로 output이 정해지는 경우
+   3. State/Event별로 Timeout이 필요할 경우
+   4. 위와 같은 경우 코드를 훨씬 가독성 있게 구조적으로 작성할수 있음.
+3. state 와 data 구분?
+   1. state + data = process state
+   2. state : select input handler
+4. GenStateMachine
+   1. Erlang의 gen_statem을 간단히 wrap한 Elixir 라이브러리.
+   2. GenStateMachine은 리턴값이나 동작 방식에 대한 설명이 부족하므로, gen_statem까지 읽어야 함.
+      1. https://hexdocs.pm/gen_state_machine/GenStateMachine.html
+      2. https://erlang.org/doc/design_principles/statem.html
+      3. https://erlang.org/doc/man/gen_statem.html
+
 # Goal 1 : State transition
+
 <img src="img/code_lock.svg" width="400px">
 
 1. state : locked, open
@@ -16,6 +40,7 @@ Reference : https://erlang.org/doc/design_principles/statem.html
 2. state_timeout 발생시 locked 로 transition.
 
 # Goal 3 : Event timeout
+
 <img src="img/code_lock_2.svg" width="400px">
 
 1. locked 상태에서 {:button, \_} 이벤트 발생마다 timeout 5000ms 를 걸고,
