@@ -1,8 +1,9 @@
 defmodule DoorLock do
   use GenStateMachine, callback_mode: [:state_functions, :state_enter]
+  import Definject
 
   defmodule Data do
-    defstruct code: [], length: 0, buttons: []
+    defstruct code: [], length: 0, input: []
   end
 
   # interface
@@ -19,49 +20,49 @@ defmodule DoorLock do
   end
 
   ## state callback
-  def locked(:enter, _old_state, %Data{} = data) do
-    do_lock()
-    {:keep_state, %Data{data | buttons: []}}
+  definject locked(:enter, _old_state, %Data{} = data) do
+    __MODULE__.do_lock()
+    {:keep_state, %Data{data | input: []}}
   end
 
-  def locked(:timeout, _, %Data{} = data) do
-    {:keep_state, %Data{data | buttons: []}}
+  definject locked(:timeout, _, %Data{} = data) do
+    {:keep_state, %Data{data | input: []}}
   end
 
-  def locked(:cast, {:button, button}, %Data{code: code, buttons: buttons} = data) do
-    (buttons ++ [button])
+  definject locked(:cast, {:button, button}, %Data{code: code, input: input} = data) do
+    (input ++ [button])
     |> Enum.reverse()
     |> Enum.take(code |> length())
     |> Enum.reverse()
     |> case do
       ^code ->
-        {:next_state, :open, %Data{data | buttons: []}, [{:state_timeout, 5000, :lock}]}
+        {:next_state, :open, %Data{data | input: []}, [{:state_timeout, 5000, :lock}]}
 
-      new_buttons ->
-        {:keep_state, %Data{data | buttons: new_buttons}, 5000}
+      new_input ->
+        {:keep_state, %Data{data | input: new_input}, 5000}
     end
   end
 
-  def open(:enter, _old_state, %Data{}) do
+  definject open(:enter, _old_state, %Data{}) do
     do_unlock()
     :keep_state_and_data
   end
 
-  def open(:state_timeout, :lock, data) do
-    do_lock()
+  definject open(:state_timeout, :lock, data) do
+    __MODULE__.do_lock()
     {:next_state, :locked, data}
   end
 
-  def open(:cast, {:button, _}, data) do
-    {:next_state, :open, data}
+  definject open(:cast, {:button, _}, _) do
+    :keep_state_and_data
   end
 
   ## actions
-  defp do_lock() do
+  def do_lock() do
     IO.puts("Locked")
   end
 
-  defp do_unlock() do
+  def do_unlock() do
     IO.puts("Unlocked")
   end
 end
