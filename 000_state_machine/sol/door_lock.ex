@@ -31,9 +31,7 @@ defmodule DoorLock do
 
   definject locked(:cast, {:button, button}, %Data{code: code, input: input} = data) do
     (input ++ [button])
-    |> Enum.reverse()
-    |> Enum.take(code |> length())
-    |> Enum.reverse()
+    |> Enum.take(-length(code))
     |> case do
       ^code ->
         {:next_state, :open, %Data{data | input: []}, [{:state_timeout, 5000, :lock}]}
