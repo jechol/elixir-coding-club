@@ -1,4 +1,5 @@
 # Goal 1 : State transition
+![](img/code_lock.svg)
 
 1. state : locked, open
 2. init state : locked
@@ -13,6 +14,7 @@
 2. state_timeout 발생시 locked 로 transition.
 
 # Goal 3 : Event timeout
+![](img/code_lock_2.svg)
 
 1. locked 상태에서 {:button, \_} 이벤트 발생마다 timeout 5000ms 를 걸고,
 2. timeout 발생시 input clear.
