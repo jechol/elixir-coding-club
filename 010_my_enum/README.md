@@ -1,21 +1,13 @@
-# MyEnum
+# Collection
 
-**TODO: Add description**
+### Enumerable
 
-## Installation
+`Enumerable` protocol 을 구현하면, `Enum` 과 `Stream` 의 첫번째 아규먼트로 사용할 수 있게 됩니다.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `my_enum` to your list of dependencies in `mix.exs`:
+Binary 는 Enumerable 이 구현되어 있지 않은데, 이를 구현해보고 왜 List와 달리 Enumerable 이 기본적으로 구현되어 있지 않는지 생각해 봅시다.
 
-```elixir
-def deps do
-  [
-    {:my_enum, "~> 0.1.0"}
-  ]
-end
-```
+### Collectable
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/my_enum](https://hexdocs.pm/my_enum).
+`Collectable` protocol 을 구현하면, `Enum.into` 함수의 2번째 아규먼트로 쓸수 있게 됩니다.
 
+Tuple 은 Collectable 이 구현되어 있지 않은데, 이를 구현해보고 왜 List와 달리 Collectable이 기본적으로 구현되어 있지 않는지 생각해 봅시다.
