@@ -46,7 +46,7 @@ defmodule EtsCounterTest do
   end
 
   test "#{@buckets} buckets with write_concurrency" do
-    table = EtsCounter.start_link(write_concurrency: true, read_concurrency: true)
+    {:ok, table} = EtsCounter.start_link(write_concurrency: true, read_concurrency: true)
 
     {time, :ok} =
       :timer.tc(fn ->

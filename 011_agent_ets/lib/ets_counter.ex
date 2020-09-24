@@ -1,6 +1,6 @@
 defmodule EtsCounter do
-  def start_link(opts \\ []) do
-    :ets.new(:ets_private, [:public] ++ opts)
+  def start_link() do
+    {:ok, :ets.new(:ets_private, [:public, write_concurrency: true, read_concurrency: true])}
   end
 
   def value(counter, key) do
