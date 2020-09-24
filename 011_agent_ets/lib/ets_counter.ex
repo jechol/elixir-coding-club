@@ -3,15 +3,15 @@ defmodule EtsCounter do
     :ets.new(:ets_private, [:public] ++ opts)
   end
 
-  def value(counter) do
-    counter
-    |> :ets.match({{:counter, :_}, :"$0"})
-    |> Enum.map(fn [c] -> c end)
-    # |> IO.inspect()
-    |> Enum.sum()
+  def value(counter, key) do
+    [[c]] =
+      counter
+      |> :ets.match({{:counter, key}, :"$0"})
+
+    c
   end
 
-  def increment(counter, partition) do
-    counter |> :ets.update_counter({:counter, partition}, 1, {{:counter, partition}, 0})
+  def increment(counter, key) do
+    counter |> :ets.update_counter({:counter, key}, 1, {{:counter, key}, 0})
   end
 end

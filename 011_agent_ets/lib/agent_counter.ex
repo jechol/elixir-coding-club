@@ -1,13 +1,13 @@
 defmodule AgentCounter do
   def start_link() do
-    Agent.start_link(fn -> 0 end)
+    Agent.start_link(fn -> %{} end)
   end
 
-  def value(pid) do
-    Agent.get(pid, & &1)
+  def value(pid, key) do
+    Agent.get(pid, &Map.get(&1, key, 0))
   end
 
-  def increment(pid) do
-    Agent.update(pid, &(&1 + 1))
+  def increment(pid, key) do
+    Agent.update(pid, fn map -> Map.update(map, key, 1, &(&1 + 1)) end)
   end
 end

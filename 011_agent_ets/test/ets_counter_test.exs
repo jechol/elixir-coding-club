@@ -3,7 +3,7 @@ defmodule EtsCounterTest do
 
   @max 100_000
 
-  test "single partition" do
+  test "single bucket" do
     table = EtsCounter.start_link()
 
     {time, :ok} =
@@ -13,38 +13,41 @@ defmodule EtsCounterTest do
         |> Stream.run()
       end)
 
-    assert @max == table |> EtsCounter.value()
+    assert @max == table |> EtsCounter.value(0)
 
-    IO.puts("#{time / 1000}ms taken.")
+    IO.puts("single bucket: #{time / 1000}ms taken.")
   end
 
-  test "10 partitions" do
+  @buckets 1000
+  @bucket_size @max / @buckets
+
+  test "#{@buckets} buckets" do
     table = EtsCounter.start_link(write_concurrency: false)
 
     {time, :ok} =
       :timer.tc(fn ->
         1..@max
-        |> Task.async_stream(fn c -> EtsCounter.increment(table, rem(c, 10)) end)
+        |> Task.async_stream(fn c -> EtsCounter.increment(table, rem(c, @buckets)) end)
         |> Stream.run()
       end)
 
-    assert @max == table |> EtsCounter.value()
+    assert @bucket_size == table |> EtsCounter.value(0)
 
-    IO.puts("10: #{time / 1000}ms taken.")
+    IO.puts("#{@buckets} buckets: #{time / 1000}ms taken.")
   end
 
-  test "10 partitions with write_concurrency" do
+  test "#{@buckets} buckets with write_concurrency" do
     table = EtsCounter.start_link(write_concurrency: true)
 
     {time, :ok} =
       :timer.tc(fn ->
         1..@max
-        |> Task.async_stream(fn c -> EtsCounter.increment(table, rem(c, 10)) end)
+        |> Task.async_stream(fn c -> EtsCounter.increment(table, rem(c, @buckets)) end)
         |> Stream.run()
       end)
 
-    assert @max == table |> EtsCounter.value()
+    assert @bucket_size == table |> EtsCounter.value(0)
 
-    IO.puts("10 + write : #{time / 1000}ms taken.")
+    IO.puts("#{@buckets} buckets + write_concurrency: #{time / 1000}ms taken.")
   end
 end
