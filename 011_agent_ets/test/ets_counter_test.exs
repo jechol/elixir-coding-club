@@ -33,11 +33,20 @@ defmodule EtsCounterTest do
 
     assert @bucket_size == table |> EtsCounter.value(0)
 
-    IO.puts("#{@buckets} buckets: #{time / 1000}ms taken.")
+    IO.puts("#{@buckets} buckets: #{time / 1000}ms taken to write.")
+
+    {time, :ok} =
+      :timer.tc(fn ->
+        1..@max
+        |> Task.async_stream(fn c -> EtsCounter.value(table, rem(c, @buckets)) end)
+        |> Stream.run()
+      end)
+
+    IO.puts("#{@buckets} buckets: #{time / 1000}ms taken to read.")
   end
 
   test "#{@buckets} buckets with write_concurrency" do
-    table = EtsCounter.start_link(write_concurrency: true)
+    table = EtsCounter.start_link(write_concurrency: true, read_concurrency: true)
 
     {time, :ok} =
       :timer.tc(fn ->
@@ -48,6 +57,15 @@ defmodule EtsCounterTest do
 
     assert @bucket_size == table |> EtsCounter.value(0)
 
-    IO.puts("#{@buckets} buckets + write_concurrency: #{time / 1000}ms taken.")
+    IO.puts("#{@buckets} buckets + write_concurrency: #{time / 1000}ms taken to write.")
+
+    {time, :ok} =
+      :timer.tc(fn ->
+        1..@max
+        |> Task.async_stream(fn c -> EtsCounter.value(table, rem(c, @buckets)) end)
+        |> Stream.run()
+      end)
+
+    IO.puts("#{@buckets} buckets + write_concurrency: #{time / 1000}ms taken to read")
   end
 end

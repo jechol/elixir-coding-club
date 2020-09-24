@@ -29,6 +29,15 @@ defmodule AgentCounterTest do
 
     assert AgentCounter.value(pid, 0) == @bucket_size
 
-    IO.puts("Agent #{time / 1000}ms taken.")
+    IO.puts("Agent #{time / 1000}ms taken to write.")
+
+    {time, :ok} =
+      :timer.tc(fn ->
+        1..@max
+        |> Task.async_stream(fn c -> AgentCounter.value(pid, rem(c, @buckets)) end)
+        |> Stream.run()
+      end)
+
+    IO.puts("Agent #{time / 1000}ms taken to read.")
   end
 end
