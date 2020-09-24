@@ -1,4 +1,6 @@
 defmodule AgentCounter do
+  @behaviour Counter
+
   def start_link() do
     Agent.start_link(fn -> %{} end)
   end

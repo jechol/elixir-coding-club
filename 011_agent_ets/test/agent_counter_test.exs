@@ -1,43 +1,21 @@
 defmodule AgentCounterTest do
   use ExUnit.Case, async: false
 
-  @max 100_000
-  @buckets 1000
-  @bucket_size @max / @buckets
-
-  setup do
-    {:ok, pid} = AgentCounter.start_link()
-    {:ok, %{pid: pid}}
+  test "value return 0 for never counted" do
+    {:ok, counter} = AgentCounter.start_link()
+    assert AgentCounter.value(counter, :never_counted) == 0
   end
 
-  test "count", %{pid: pid} do
-    AgentCounter.value(pid, 0)
-    AgentCounter.increment(pid, 0)
-    AgentCounter.increment(pid, 0)
+  test "increment" do
+    {:ok, counter} = AgentCounter.start_link()
 
-    assert AgentCounter.value(pid, 0) == 2
-    assert AgentCounter.value(pid, 1) == 0
-  end
+    Task.async(fn ->
+      AgentCounter.increment(counter, :a)
+      AgentCounter.increment(counter, :a)
+      AgentCounter.increment(counter, :b)
 
-  test "bench", %{pid: pid} do
-    {time, :ok} =
-      :timer.tc(fn ->
-        1..@max
-        |> Task.async_stream(fn c -> AgentCounter.increment(pid, rem(c, @buckets)) end)
-        |> Stream.run()
-      end)
-
-    assert AgentCounter.value(pid, 0) == @bucket_size
-
-    IO.puts("Agent #{time / 1000}ms taken to write.")
-
-    {time, :ok} =
-      :timer.tc(fn ->
-        1..@max
-        |> Task.async_stream(fn c -> AgentCounter.value(pid, rem(c, @buckets)) end)
-        |> Stream.run()
-      end)
-
-    IO.puts("Agent #{time / 1000}ms taken to read.")
+      assert AgentCounter.value(counter, :a) == 2
+    end)
+    |> Task.await()
   end
 end

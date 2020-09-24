@@ -1,10 +1,7 @@
-# list = Enum.to_list(1..10_000)
-# map_fun = fn i -> [i, i * i] end
-
-max = 100_000
-buckets = 1000
-
 bench_counter = fn counter_mod ->
+  max = 100_000
+  buckets = 1000
+
   {:ok, counter} = counter_mod.start_link()
 
   1..max
@@ -17,7 +14,6 @@ bench_counter = fn counter_mod ->
     |> Enum.reduce(0, fn {:ok, n}, acc -> acc + n end)
 
   if sum != max do
-    IO.inspect(sum)
     raise RuntimeError
   end
 end
