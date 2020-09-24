@@ -1,21 +1,15 @@
-# AgentEts
+## Agent vs ETS
 
-**TODO: Add description**
+### 구현
 
-## Installation
+Agent 와 ETS 를 사용하여 counter 를 구현해보자.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `agent_ets` to your list of dependencies in `mix.exs`:
+(ETS 는 read_concurreny: true, write_concurrency: true 를 적용할 것.)
 
-```elixir
-def deps do
-  [
-    {:agent_ets, "~> 0.1.0"}
-  ]
-end
+### 벤치마크
+
+```
+mix run bench/counter_tests.exs
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/agent_ets](https://hexdocs.pm/agent_ets).
-
+counter 예제에 대한 ETS와 Agent의 성능을 비교해보고, 어떤 솔루션이 더 적합한지 생각해보자.
