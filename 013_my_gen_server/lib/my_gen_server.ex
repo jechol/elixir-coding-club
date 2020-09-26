@@ -1,18 +1,15 @@
 defmodule MyGenServer do
-  @moduledoc """
-  Documentation for `MyGenServer`.
-  """
+  defstruct module: nil, state: nil
 
-  @doc """
-  Hello world.
+  def start_link(module, init_arg) do
+    # Hint: self(), make_ref(), spawn_link(), send(), receive()
+  end
 
-  ## Examples
+  def call(server, request) do
+    # Hint: send(), receive()
+  end
 
-      iex> MyGenServer.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  defp loop(module, state) do
+    # Hint: receive(), send()
   end
 end

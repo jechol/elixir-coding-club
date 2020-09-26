@@ -1,21 +1,12 @@
 # MyGenServer
 
-**TODO: Add description**
+1. GenServer.start_link/2
+2. GenServer.call/2
 
-## Installation
+위 2가지 기능을 가진 GenServer 의 최소 버전을 구현해보자.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `my_gen_server` to your list of dependencies in `mix.exs`:
+### Test
 
-```elixir
-def deps do
-  [
-    {:my_gen_server, "~> 0.1.0"}
-  ]
-end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/my_gen_server](https://hexdocs.pm/my_gen_server).
-
+mix test
+```
