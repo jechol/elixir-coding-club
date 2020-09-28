@@ -7,10 +7,10 @@ defmodule Observing.Application do
 
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Observing.Worker.start_link(arg)
-      Supervisor.child_spec({Worker, [name: Registered]}, id: Observing.RegisteredProcess),
-      Supervisor.child_spec({Worker, []}, id: Anonymous),
-      Worker.Parent,
+      # Starts a worker by calling: Observing.Observing.Worker.start_link(arg)
+      Supervisor.child_spec(Observing.Worker, id: Anonymous),
+      Supervisor.child_spec({Observing.Worker, [name: Registered]}, id: Observing.Registered),
+      {Observing.ParentWorker, [name: Parent]},
       Observing.ChildSup
     ]
 

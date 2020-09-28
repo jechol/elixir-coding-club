@@ -1,4 +1,4 @@
-defmodule Worker do
+defmodule Observing.Worker do
   use GenServer
 
   def start_link(opts) do
