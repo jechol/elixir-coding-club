@@ -8,7 +8,8 @@ defmodule Observing.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Observing.Worker.start_link(arg)
-      # {Observing.Worker, arg}
+      Worker.Anonymous,
+      Worker.Named
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
