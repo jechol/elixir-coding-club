@@ -1,4 +1,4 @@
-defmodule Supervisor.ChildSup do
+defmodule Observing.ChildSup do
   use Supervisor
 
   def start_link([]) do
@@ -8,8 +8,8 @@ defmodule Supervisor.ChildSup do
   @impl true
   def init([]) do
     children = [
-      Supervisor.child_spec(Worker.Anonymous, id: Worker1),
-      Supervisor.child_spec(Worker.Anonymous, id: Worker2)
+      Supervisor.child_spec(Worker, id: Worker1),
+      Supervisor.child_spec(Worker, id: Worker2)
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

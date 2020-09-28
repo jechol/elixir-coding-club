@@ -8,9 +8,10 @@ defmodule Observing.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Observing.Worker.start_link(arg)
-      Worker.Anonymous,
-      Worker.Named,
-      Supervisor.ChildSup
+      Supervisor.child_spec({Worker, [name: Registered]}, id: Observing.RegisteredProcess),
+      Supervisor.child_spec({Worker, []}, id: Anonymous),
+      Worker.Parent,
+      Observing.ChildSup
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
