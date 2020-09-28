@@ -6,13 +6,21 @@ defmodule Observing.ParentWorker do
   end
 
   def init([]) do
+    # ETS
+    :ets.new(:parent, [:public, :named_table])
+    :ets.insert(:parent, {:message, "check this row in observer"})
+
     # link
-    Observing.Worker.start_link(name: LinkedChild)
+    # {:ok, pid} = Observing.Worker.start_link(name: LinkedChild)
+    # send(pid, :check_this_message_in_observer)
+
+    # link
+    linked = spawn_link(&wait/0)
+    Process.register(linked, Linked)
 
     # monitor
-    monitored = spawn(&wait/0)
-    Process.register(monitored, MonitoredChild)
-    Process.monitor(monitored)
+    {monitored, _ref} = spawn_monitor(&wait/0)
+    Process.register(monitored, Monitored)
 
     {:ok, []}
   end
@@ -20,7 +28,5 @@ defmodule Observing.ParentWorker do
   def wait() do
     receive do
     end
-
-    wait()
   end
 end

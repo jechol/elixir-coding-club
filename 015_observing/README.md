@@ -1,21 +1,15 @@
 # Observing
 
-**TODO: Add description**
+### Observer
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `observing` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:observing, "~> 0.1.0"}
-  ]
-end
+```
+:observer.start
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/observing](https://hexdocs.pm/observing).
+### Process Tree
 
+observer 의 applications 에 나타나는 process tree 는 어떤 원리로 구성되는지 실험해 보자.
+
+### ETS
+
+observer 의 ets 에서 parent ets 를 찾아보자.
