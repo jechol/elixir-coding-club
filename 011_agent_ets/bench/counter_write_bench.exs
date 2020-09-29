@@ -1,12 +1,12 @@
 bench_write = fn counter_mod ->
-  max = 1_000_000
-  buckets = 1_000
-  repeat = max |> div(buckets)
+  tasks = 1_000
+  repeat = 1_000
+  sum = tasks * repeat
 
   {:ok, counter} = counter_mod.start_link()
 
-  ^max =
-    0..(buckets - 1)
+  ^sum =
+    0..(tasks - 1)
     |> Task.async_stream(fn b ->
       0..(repeat - 1) |> Enum.each(fn _ -> counter_mod.increment(counter, b) end)
       counter_mod.value(counter, b)

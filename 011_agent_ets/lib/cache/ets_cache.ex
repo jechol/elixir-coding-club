@@ -9,7 +9,7 @@ defmodule EtsCache do
     cache
     |> :ets.lookup(key)
     |> case do
-      [[{^key, value}]] -> {:ok, value}
+      [{^key, value}] -> {:ok, value}
       [] -> :error
     end
   end

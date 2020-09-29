@@ -1,10 +1,10 @@
 bench_read = fn counter_mod ->
-  buckets = 1_000
+  tasks = 1_000
   repeat = 1_000
 
   {:ok, counter} = counter_mod.start_link()
 
-  0..(buckets - 1)
+  0..(tasks - 1)
   |> Task.async_stream(fn b ->
     counter_mod.increment(counter, b)
     0..(repeat - 1) |> Enum.each(fn _ -> counter_mod.value(counter, b) end)
