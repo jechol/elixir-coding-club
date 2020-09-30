@@ -1,18 +1,38 @@
 defmodule MySupervisor do
-  @moduledoc """
-  Documentation for `MySupervisor`.
-  """
+  def start_link(children, strategy: :one_for_one) do
+    spawn_link(fn -> supervise(children) end)
+  end
 
-  @doc """
-  Hello world.
+  def supervise(children) do
+    Process.flag(:trap_exit, true)
 
-  ## Examples
+    children
+    |> Enum.map(&start/1)
+    |> Enum.zip(children)
+    |> Enum.into(%{})
+    |> loop()
+  end
 
-      iex> MySupervisor.hello()
-      :world
+  def start({mod, args}) do
+    {:ok, pid} = Kernel.apply(mod, :start_link, [args])
+    ref = Process.monitor(pid)
 
-  """
-  def hello do
-    :world
+    {pid, ref}
+  end
+
+  def loop(children) do
+    receive do
+      {:EXIT, _, _} ->
+        loop(children)
+
+      {:DOWN, ref, :process, pid, _reason} ->
+        down = {pid, ref}
+        mod_args = children |> Map.get(down)
+
+        children
+        |> Map.delete(down)
+        |> Map.put(start(mod_args), mod_args)
+        |> loop()
+    end
   end
 end

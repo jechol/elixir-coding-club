@@ -1,21 +1,21 @@
 # MySupervisor
 
-**TODO: Add description**
+목표: 기본적 기능만 하는 supervisor 를 만들어 보자.
 
-## Installation
+### 요구사항
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `my_supervisor` to your list of dependencies in `mix.exs`:
+- permanent restart 만 지원. (transient, temporary 지원 안함)
+- one_for_one strategy 만 지원.
+- max_restart 무시. (연속해서 terminate 하더라도 계속 restart)
 
-```elixir
-def deps do
-  [
-    {:my_supervisor, "~> 0.1.0"}
-  ]
-end
+### 도구
+
+- Process.flag(:trap_exit, true)
+- Process.monitor(child_pid)
+- receive
+
+### 검증
+
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/my_supervisor](https://hexdocs.pm/my_supervisor).
-
+mix test
+```

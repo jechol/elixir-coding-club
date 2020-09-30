@@ -1,25 +1,25 @@
 defmodule MySupervisorTest do
   use ExUnit.Case
 
-  test "Restarts after termination" do
-    Process.flag(:trap_exit, true)
+  for sup_mod <- [Supervisor, MySupervisor] do
+    @sup_mod sup_mod
 
-    children = [
-      # Terminate every 200ms
-      {TimedBomb, 200}
-    ]
+    test "#{@sup_mod} for permanent restart" do
+      Process.flag(:trap_exit, true)
 
-    {:ok, sup} = Supervisor.start_link(children, strategy: :one_for_one)
-    first = Process.whereis(TimedBomb)
-    # Wait for first termination
-    Process.sleep(300)
-    second = Process.whereis(TimedBomb)
+      children = [
+        # Terminate every 200ms
+        {TimedBomb, 200}
+      ]
 
-    assert first != second
-    assert Process.alive?(sup)
+      {:ok, sup} = Supervisor.start_link(children, strategy: :one_for_one)
+      first = Process.whereis(TimedBomb)
+      # Wait for first termination
+      Process.sleep(300)
+      second = Process.whereis(TimedBomb)
 
-    # Supervisor tries 3 restarts for 5 seconds, and exit itself.
-    Process.sleep(700)
-    refute Process.alive?(sup)
+      assert first != second
+      assert Process.alive?(sup)
+    end
   end
 end
