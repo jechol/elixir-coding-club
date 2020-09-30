@@ -1,8 +1,8 @@
 defmodule LearnCoverageTest do
   use ExUnit.Case
-  doctest LearnCoverage
 
-  test "greets the world" do
-    assert LearnCoverage.hello() == :world
+  test "call" do
+    assert LearnCoverage.target_called()
+    assert LearnCoverage.not_target_called()
   end
 end
