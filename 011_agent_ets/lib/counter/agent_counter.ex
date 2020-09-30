@@ -10,6 +10,17 @@ defmodule AgentCounter do
   end
 
   def increment(pid, key) do
-    Agent.update(pid, fn map -> Map.update(map, key, 1, &(&1 + 1)) end)
+    caller = self()
+    ref = make_ref()
+
+    Agent.update(pid, fn map ->
+      new_map = %{^key => new_value} = Map.update(map, key, 1, &(&1 + 1))
+      send(caller, {pid, ref, new_value})
+      new_map
+    end)
+
+    receive do
+      {^pid, ^ref, new_value} -> new_value
+    end
   end
 end

@@ -24,4 +24,24 @@ defmodule AgentCounterTest do
       end
     end
   end
+
+  # def count_parallel(counter_mod) do
+  #   {:ok, counter} = counter_mod.start_link()
+
+  #   0..999_9
+  #   |> Enum.chunk_every(100)
+  #   |> Task.async_stream(fn _ ->
+  #     counter_mod.increment(counter, :rand.uniform(10))
+  #   end)
+  #   |> Stream.run()
+
+  #   0..999
+  #   |> Enum.map(fn i -> counter_mod.value(counter, i) end)
+  #   |> Enum.reduce(0, &Kernel.+/2)
+  # end
+
+  # test "ets is not safe" do
+  #   sum = count_parallel(EtsCounter)
+  #   assert sum == 100_00
+  # end
 end
