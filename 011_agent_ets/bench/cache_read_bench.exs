@@ -1,3 +1,4 @@
+schedulers = :erlang.system_info(:schedulers)
 repeat = 10000
 keys = 1000
 
@@ -33,7 +34,7 @@ Benchee.run(
       before_scenario: fn tasks -> setup_cache.(cache_mod, tasks) end}}
   end),
   inputs:
-    [1, :erlang.system_info(:schedulers)]
+    [1, schedulers]
     |> Enum.map(fn tasks ->
       {"(tasks: #{tasks})", tasks}
     end)
