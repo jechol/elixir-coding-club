@@ -1,18 +1,17 @@
 defmodule LearnCoverage do
-  @moduledoc """
-  Documentation for `LearnCoverage`.
-  """
+  def target_called do
+    "called" |> String.to_atom()
+  end
 
-  @doc """
-  Hello world.
+  def target_not_called do
+    "not_called" |> String.to_atom()
+  end
 
-  ## Examples
+  def not_target_called do
+    :not_target
+  end
 
-      iex> LearnCoverage.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def not_target_not_called do
+    :not_target
   end
 end
