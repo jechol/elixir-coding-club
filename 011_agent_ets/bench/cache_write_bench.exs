@@ -15,12 +15,12 @@ end
 Benchee.run(
   [AgentCache, EtsCache]
   |> Enum.map(fn cache_mod ->
-    {"#{cache_mod}", fn input -> bench_write.(cache_mod, input) end}
+    {cache_mod, fn input -> bench_write.(cache_mod, input) end}
   end),
   inputs:
     [{1, 0.1}, {1, 0.5}, {schedulers, 0.1}, {schedulers, 0.5}]
     |> Enum.map(fn setup = {tasks, conflict} ->
-      {"(tasks: #{tasks}, conflict: #{conflict})", setup}
+      {%{tasks: tasks, conflict: conflict} |> inspect(), setup}
     end),
   before_scenario: fn {tasks, conflict} ->
     import StreamData

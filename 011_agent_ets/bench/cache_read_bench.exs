@@ -29,13 +29,7 @@ end
 Benchee.run(
   [AgentCache, EtsCache]
   |> Enum.map(fn cache_mod ->
-    {"#{cache_mod}",
-     {fn setup -> bench_read.(setup) end,
-      before_scenario: fn tasks -> setup_cache.(cache_mod, tasks) end}}
+    {cache_mod, {bench_read, before_scenario: fn tasks -> setup_cache.(cache_mod, tasks) end}}
   end),
-  inputs:
-    [1, schedulers]
-    |> Enum.map(fn tasks ->
-      {"(tasks: #{tasks})", tasks}
-    end)
+  inputs: [1, schedulers] |> Enum.map(fn tasks -> {%{tasks: tasks} |> inspect(), tasks} end)
 )

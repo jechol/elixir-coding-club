@@ -5,7 +5,7 @@ bench_read = fn {counter_mod, counter, tasks, keys} ->
   task_repeat = repeat |> div(tasks)
 
   1..tasks
-  |> Task.async_stream(fn b ->
+  |> Task.async_stream(fn _ ->
     1..task_repeat |> Enum.each(fn _ -> 1 = counter_mod.value(counter, :rand.uniform(keys)) end)
   end)
   |> Stream.run()
