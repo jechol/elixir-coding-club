@@ -1,5 +1,5 @@
 repeat = 10000
-keys = 100
+keys = 1000
 
 bench_read = fn {cache_mod, cache, tasks} ->
   task_repeat = repeat |> div(tasks)
@@ -26,14 +26,12 @@ setup_cache = fn cache_mod, tasks ->
 end
 
 Benchee.run(
-  %{
-    "AgentCache.Read" =>
-      {fn setup -> bench_read.(setup) end,
-       before_scenario: fn tasks -> setup_cache.(AgentCache, tasks) end},
-    "EtsCache.Read" =>
-      {fn setup -> bench_read.(setup) end,
-       before_scenario: fn tasks -> setup_cache.(EtsCache, tasks) end}
-  },
+  [AgentCache, EtsCache]
+  |> Enum.map(fn cache_mod ->
+    {"#{cache_mod}",
+     {fn setup -> bench_read.(setup) end,
+      before_scenario: fn tasks -> setup_cache.(cache_mod, tasks) end}}
+  end),
   inputs:
     [1, :erlang.system_info(:schedulers)]
     |> Enum.map(fn tasks ->
