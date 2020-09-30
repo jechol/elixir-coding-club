@@ -1,33 +1,27 @@
-bench_write = fn counter_mod ->
-  counters = 1
+schedulers = :erlang.system_info(:schedulers)
+repeat = 100_000
 
-  # AgentCounter는 map 단위로 update 되지만, EtsCounter 는 row 단위로 update 되기 때문에,
-  # row 를 늘리면 EtsCounter 의 성능이 core 수만큼 증가한다.
-  # counters = 100
-
-  tasks = 1_000
-  repeat = 1_000
-  sum = tasks * repeat
-
+bench_write = fn counter_mod, {tasks, keys} ->
   {:ok, counter} = counter_mod.start_link()
+  task_repeat = repeat |> div(tasks)
 
   1..tasks
-  |> Task.async_stream(fn b ->
-    1..repeat |> Enum.each(fn _ -> counter_mod.increment(counter, :rand.uniform(counters)) end)
+  |> Task.async_stream(fn _ ->
+    1..task_repeat |> Enum.each(fn _ -> counter_mod.increment(counter, :rand.uniform(keys)) end)
   end)
   |> Stream.run()
-
-  ^sum =
-    1..counters
-    |> Enum.map(fn c -> counter_mod.value(counter, c) end)
-    |> Enum.reduce(0, &Kernel.+/2)
 end
 
-Benchee.run(%{
-  "AgentCounter.Write" => fn ->
-    bench_write.(AgentCounter)
-  end,
-  "EtsCounter.Write" => fn ->
-    bench_write.(EtsCounter)
-  end
-})
+Benchee.run(
+  [AgentCounter, EtsCounter]
+  |> Enum.map(fn counter_mod ->
+    {counter_mod, fn input -> bench_write.(counter_mod, input) end}
+  end),
+  inputs:
+    [{1, 1}, {1, 1000}, {schedulers, 1}, {schedulers, 1000}]
+    |> Enum.map(fn {tasks, keys} ->
+      {%{tasks: tasks, keys: keys} |> inspect(), {tasks, keys}}
+    end),
+  warmup: 1,
+  time: 2
+)
