@@ -17,8 +17,5 @@ defmodule EtsCounter do
   def increment(counter, key) do
     counter
     |> :ets.update_counter({:counter, key}, 1, {{:counter, key}, 0})
-    |> case do
-      _ -> :ok
-    end
   end
 end
