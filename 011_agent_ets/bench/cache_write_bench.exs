@@ -1,45 +1,50 @@
-tasks = 1
-repeat = 100
-
-# keys = 1
-keys = 1_000
-
-value_length = 1_000
-
-contents =
-  (fn ->
-     import StreamData
-
-     1..tasks
-     |> Enum.map(fn _ ->
-       #  {integer(1..keys), integer() |> list_of(length: value_length)}
-       {integer(1..keys), binary(length: 1000)}
-       |> tuple()
-       |> Enum.take(repeat)
-     end)
-   end).()
-
-^tasks = contents |> Enum.count()
-^repeat = contents |> List.first() |> Enum.count()
-# ^value_length = contents |> List.first() |> List.first() |> elem(1) |> Enum.count()
-^value_length = contents |> List.first() |> List.first() |> elem(1) |> byte_size()
-
-bench_write = fn cache_mod ->
+bench_write = fn cache_mod, input ->
   {:ok, cache} = cache_mod.start_link()
 
-  contents
-  |> Task.async_stream(fn task_content ->
-    task_content
+  input
+  |> Task.async_stream(fn task_input ->
+    task_input
     |> Enum.each(fn {k, v} -> cache_mod.set(cache, k, v) end)
   end)
   |> Stream.run()
 end
 
-Benchee.run(%{
-  "AgentCache.Write" => fn ->
-    bench_write.(AgentCache)
-  end,
-  "EtsCache.Write" => fn ->
-    bench_write.(EtsCache)
+schedulers = :erlang.system_info(:schedulers)
+
+Benchee.run(
+  %{
+    "AgentCache.Write" => fn input ->
+      bench_write.(AgentCache, input)
+    end,
+    "EtsCache.Write" => fn input ->
+      bench_write.(EtsCache, input)
+    end
+  },
+  inputs:
+    [{1, 0.1}, {1, 0.5}, {schedulers, 0.1}, {schedulers, 0.5}]
+    |> Enum.map(fn setup = {tasks, conflict} ->
+      {"(tasks: #{tasks}, conflict: #{conflict})", setup}
+    end),
+  before_scenario: fn {tasks, conflict} ->
+    repeat = 10000
+    task_repeat = repeat |> div(tasks)
+    keys = ((repeat - 1) * (1 - conflict)) |> trunc() |> Kernel.+(1)
+
+    input =
+      (fn ->
+         import StreamData
+
+         1..tasks
+         |> Enum.map(fn _ ->
+           {integer(1..keys), term() |> resize(10)}
+           |> tuple()
+           |> Enum.take(task_repeat)
+         end)
+       end).()
+
+    ^tasks = input |> Enum.count()
+    ^repeat = input |> Enum.map(&Enum.count/1) |> Enum.sum()
+
+    input
   end
-})
+)
