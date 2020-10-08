@@ -1,23 +1,22 @@
 defmodule MyTaskTest do
   use ExUnit.Case
 
-  test "Task.async,await for reference" do
-    task = Task.async(fn -> :foo end)
+  for task <- [Task, MyTask] do
+    @task task
 
-    assert :foo == Task.await(task)
-  end
+    test "#{task} success" do
+      this = self()
+      task = %@task{owner: ^this, pid: _pid, ref: _ref} = @task.async(fn -> :foo end)
 
-  test "success" do
-    task = MyTask.async(fn -> :foo end)
+      assert :foo == @task.await(task)
+    end
 
-    assert :foo == MyTask.await(task)
-  end
+    test "#{task} failure" do
+      Process.flag(:trap_exit, true)
 
-  test "failure" do
-    Process.flag(:trap_exit, true)
+      @task.async(fn -> raise RuntimeError end)
 
-    MyTask.async(fn -> raise RuntimeError end)
-
-    assert_receive {:EXIT, _, {%RuntimeError{}, _}}
+      assert_receive {:EXIT, _, {%RuntimeError{}, _}}
+    end
   end
 end
