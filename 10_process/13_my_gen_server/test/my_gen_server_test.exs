@@ -2,23 +2,22 @@ defmodule MyGenServerTest do
   use ExUnit.Case
   doctest MyGenServer
 
-  defmodule Greet do
-    def init(greet) do
-      {:ok, greet}
+  defmodule Adder do
+    def init(offset) do
+      {:ok, offset}
     end
 
-    def handle_call({:greet, name}, _from, greet) do
-      {:reply, "#{greet} #{name}", greet}
+    def handle_call({:add, num}, _from, offset) do
+      {:reply, num + offset, offset}
     end
   end
 
-  test "GenServer for reference" do
-    {:ok, pid} = GenServer.start_link(Greet, "Hello")
-    "Hello world" = GenServer.call(pid, {:greet, "world"})
-  end
+  for gen_server <- [GenServer, MyGenServer] do
+    @gen_server gen_server
 
-  test "MyGenServer" do
-    {:ok, pid} = MyGenServer.start_link(Greet, "Hello")
-    "Hello world" = MyGenServer.call(pid, {:greet, "world"})
+    test "#{@gen_server}.call" do
+      {:ok, pid} = @gen_server.start_link(Adder, 10)
+      110 = @gen_server.call(pid, {:add, 100})
+    end
   end
 end
