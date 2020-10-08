@@ -4,7 +4,7 @@
 
 Agent 와 ETS 를 사용하여 counter 를 구현해보자.
 
-(ETS 는 read_concurreny: true, write_concurrency: true 를 적용할 것.)
+(ETS 는 read_concurrency: true, write_concurrency: true 를 적용할 것.)
 
 ### 벤치마크
 
