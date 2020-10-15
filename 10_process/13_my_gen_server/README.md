@@ -13,6 +13,7 @@ iex(4)> GenServer.call(pid, :foo)
 2. call/2
 
 위 2가지 기능을 가진 GenServer 의 최소 버전을 구현해보자.
+start_link 는 init/1 이 호출된 후에 리턴되어야 함을 유의.
 
 ### Test
 
