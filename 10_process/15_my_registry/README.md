@@ -33,5 +33,5 @@ Registry의 숨겨진 API 인 register_name, whereis_name 을 구현하여 같�
 ### 검증
 
 ```
-mix test
+mix test test/my_registry_test.exs:24
 ```
