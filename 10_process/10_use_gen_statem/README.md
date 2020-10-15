@@ -23,6 +23,13 @@ Reference : https://erlang.org/doc/design_principles/statem.html
       2. https://erlang.org/doc/design_principles/statem.html
       3. https://erlang.org/doc/man/gen_statem.html
 
+### 검증
+
+아래 스테이지에 해당하는 테스트만 활성화 시킨 후, (즉 stage2 에서는 stage1 은 다시 비활성화 해야함.)
+```
+mix test
+```
+
 # Goal 1 : State transition
 
 <img src="img/code_lock.svg" width="400px">

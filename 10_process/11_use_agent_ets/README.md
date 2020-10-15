@@ -6,6 +6,12 @@ Agent 와 ETS 를 사용하여 cache 를 구현해보자.
 
 (ETS 는 read_concurrency: true, write_concurrency: true 를 적용할 것.)
 
+### 검증
+
+```
+mix test
+```
+
 ### 벤치마크
 
 (agent_cache.ex, ets_cache.ex 를 구현 후에만 benchmark 가능. lib_sol/ 참고)

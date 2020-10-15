@@ -1,7 +1,6 @@
 ## MyTask
 
-Task.async 를 reverse engineering 하고,
-spawn_link, make_ref, send, receive 를 사용하여
+아래를 참고하여 spawn_link, make_ref, send, receive 를 사용하여
 Task.async, await 을 직접 구현해 보자.
 
 ```
@@ -14,3 +13,10 @@ iex(1)> Task.async(fn -> :foo end)
 iex(2)> flush
 {#Reference<0.1470435912.721158150.77392>, :foo}
 ```
+
+### 검증
+
+```
+mix test
+```
+

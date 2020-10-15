@@ -4,8 +4,8 @@
 
 ### 요구사항
 
-- permanent restart 만 지원. (transient, temporary 지원 안함)
-- one_for_one strategy 만 지원.
+- restart: :permanent 만 지원. (transient, temporary 지원 안함)
+- strategy: :one_for_one 만 지원.
 - max_restart 무시. (연속해서 terminate 하더라도 계속 restart)
 
 ### 도구
