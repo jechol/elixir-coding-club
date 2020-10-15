@@ -6,7 +6,7 @@ defmodule MyTask do
     ref = make_ref()
     pid = spawn_link(fn -> send(from, {ref, fun.()}) end)
 
-    %MyTask{owner: self(), pid: pid, ref: ref}
+    %MyTask{owner: from, pid: pid, ref: ref}
   end
 
   def await(%MyTask{ref: ref}) do
