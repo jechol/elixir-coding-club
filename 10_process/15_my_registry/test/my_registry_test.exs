@@ -9,7 +9,7 @@ defmodule MyRegistryTest do
       this = self()
 
       {:ok, _} = @registry.start_link(keys: :unique, name: reg_name)
-      {:ok, _} = @registry.register(reg_name, "hello", "world")
+      {:ok, _registry_pid} = @registry.register(reg_name, "hello", "world")
 
       {:error, {:already_registered, ^this}} = @registry.register(reg_name, "hello", "world")
 

@@ -6,14 +6,15 @@ defmodule MyRegistry do
   def register(reg_name, key, value) do
     this = self()
 
-    case Agent.get(reg_name, fn map -> map |> Map.fetch(key) end) do
-      {:ok, {existing_pid, _existing_value}} ->
-        {:error, {:already_registered, existing_pid}}
+    Agent.get_and_update(reg_name, fn map ->
+      case map |> Map.fetch(key) do
+        {:ok, {existing_pid, _existing_value}} ->
+          {{:error, {:already_registered, existing_pid}}, map}
 
-      :error ->
-        Agent.update(reg_name, fn map -> map |> Map.put_new(key, {this, value}) end)
-        {:ok, self()}
-    end
+        :error ->
+          {{:ok, self()}, map |> Map.put_new(key, {this, value})}
+      end
+    end)
   end
 
   def lookup(reg_name, key) do
