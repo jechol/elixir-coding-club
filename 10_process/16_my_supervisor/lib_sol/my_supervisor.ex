@@ -1,6 +1,7 @@
 defmodule MySupervisor do
   def start_link(children, strategy: :one_for_one) do
-    spawn_link(fn -> supervise(children) end)
+    pid = spawn_link(fn -> supervise(children) end)
+    {:ok, pid}
   end
 
   def supervise(children) do

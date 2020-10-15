@@ -12,7 +12,7 @@ defmodule MySupervisorTest do
         {TimedBomb, 200}
       ]
 
-      {:ok, sup} = Supervisor.start_link(children, strategy: :one_for_one)
+      {:ok, sup} = @sup_mod.start_link(children, strategy: :one_for_one)
       first = Process.whereis(TimedBomb)
       # Wait for first termination
       Process.sleep(300)
@@ -20,6 +20,8 @@ defmodule MySupervisorTest do
 
       assert first != second
       assert Process.alive?(sup)
+
+      Process.sleep(100)
     end
   end
 end
