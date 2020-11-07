@@ -1,21 +1,21 @@
-# Clustering
+# Distribution
 
-**TODO: Add description**
+## Setup EPMD
 
-## Installation
+distributed node 에 필요한 API 들은 node discovery 를 위해 epmd 에 연결을 시도한다.
+epmd 는 iex 와 별개로 미리 실행되어 있어야 한다.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `clustering` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:clustering, "~> 0.1.0"}
-  ]
-end
+```console
+$ epmd -daemon
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/clustering](https://hexdocs.pm/clustering).
+epmd 가 응답하는지 확인하려면
+
+```console
+$ epmd -names
+```
+
+
+
+
 
