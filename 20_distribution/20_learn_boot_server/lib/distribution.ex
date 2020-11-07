@@ -1,4 +1,4 @@
-defmodule Clustering do
+defmodule Distribution do
   use Application
 
   def start(_type, _args) do

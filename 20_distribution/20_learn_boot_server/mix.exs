@@ -1,9 +1,9 @@
-defmodule Clustering.MixProject do
+defmodule Distribution.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :clustering,
+      app: :distribution,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
@@ -15,7 +15,7 @@ defmodule Clustering.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Clustering, []}
+      mod: {Distribution, []}
     ]
   end
 
