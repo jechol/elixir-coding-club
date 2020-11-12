@@ -112,7 +112,7 @@ defmodule Cluster do
         :ok
 
       :pang ->
-        Process.sleep(1_000)
+        Process.sleep(100)
         wait_for_other_node_up(node)
     end
   end
