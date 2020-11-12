@@ -1,5 +1,7 @@
 # Rpg (Re-impl of Erlang/OTP pg)
 
+(Copied from https://github.com/jechol/rpg)
+
 This is re-implementation of Erlang/OTP pg module in Elixir for learning purpose.
 
 Major differences are summarized below.
