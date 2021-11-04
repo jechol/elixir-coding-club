@@ -1,15 +1,20 @@
 let
   nixpkgs = import (fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
-    sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+    url = "https://github.com/jechol/nixpkgs/archive/otp24-no-jit.tar.gz";
+    sha256 = "sha256:01n9hn9v7w9kgcd4zipf08bg9kskmpm7sp7f8z3yawk2c0w7q2kl";
   }) { };
-  beam = import (fetchTarball {
-    url = "https://github.com/jechol/nix-beam/archive/v4.3.tar.gz";
-    sha256 = "117c43s256i2nzp0zps9n2f630gm00yhsbgc78r2qimi0scdxf52";
-  }) { };
+  platform = if nixpkgs.stdenv.isDarwin then [
+    nixpkgs.darwin.apple_sdk.frameworks.CoreServices
+    nixpkgs.darwin.apple_sdk.frameworks.Foundation
+  ] else if nixpkgs.stdenv.isLinux then
+    [ nixpkgs.inotify-tools ]
+  else
+    [ ];
 in nixpkgs.mkShell {
-  buildInputs = [
-    beam.erlang.v23_1
-    beam.pkg.v23_1.elixir.v1_11_0
-  ];
+  buildInputs = with nixpkgs;
+    [
+      # OTP
+      erlang
+      elixir
+    ] ++ platform;
 }
